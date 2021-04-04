@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div>
+    {% if current_user.is_authenticated %}
+    <a href="/add_job" class="btn btn-secondary">Add job</a>
+    {% endif %}
+    <a href="/departments" class="btn btn-secondary">Show departments</a>
+</div>
+<h2>Works Log</h2>
+{% for job in jobs %}
+<h2>Action # {{job.id}}</h2>
+<style>
+    table {
+    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+    font-size: 14px;
+    border-collapse: collapse;
+    text-align: center;
+    }
+    th, td:first-child {
+    background: #AFCDE7;
+    color: white;
+    padding: 10px 20px;
+    }
+    th, td {
+    border-style: solid;
+    border-width: 0 1px 1px 0;
+    border-color: white;
+    }
+    td {
+    background: #D8E6F3;
+    }
+    th:first-child, td:first-child {
+    text-align: left;
+    }
+</style>
+<table>
+    <tr>
+        <th scope="col">Title of acivity</th>
+        <th scope="col">Team Leader</th>
+        <th scope="col">Duration</th>
+        <th scope="col">List of collaborators</th>
+        <th scope="col">Is Finished</th>
+    </tr>
+    <tr>
+        <td>{{job.job}}</td>
+        <td>{{job.user.name}} {{job.user.surname}}</td>
+        <td>{{job.work_size}} hours</td>
+        <td>{{job.collaborators}}</td>
+        {% if job.is_finished %}
+        <td>Finished</td>
+        {% else %}
+        <td>Is not finished</td>
+        {% endif %}
+    </tr>
+</table>
+{% if current_user.is_authenticated and current_user == job.user %}
+<div>
+    <a href="/add_job/{{job.id}}" class="btn btn-warning">Edit</a>
+    <a href="/job_delete/{{job.id}}" class="btn btn-danger">Delete</a>
+</div>
+{% endif %}
+{% endfor %}
+{% endblock %}
